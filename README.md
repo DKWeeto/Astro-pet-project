@@ -31,3 +31,5 @@ THRESHOLD green 0
 THRESHOLD yellow 50
 THRESHOLD amber 100
 THRESHOLD red 200
+
+![ERD draft](./drawSQL-image-export-2024-05-16.png)
