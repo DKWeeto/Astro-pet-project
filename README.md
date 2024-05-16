@@ -32,4 +32,6 @@ THRESHOLD yellow 50
 THRESHOLD amber 100
 THRESHOLD red 200
 
-![ERD draft](./drawSQL-image-export-2024-05-16.png)
+![ERD draft](./Screenshot%202024-05-16%20at%2017.28.08.png)
+
+![Example star chart (red mode)](https://widgets.astronomyapi.com/star-chart/generated/5ed13e0447cb88ef6d0a4784ae1202638cf0c8bf33e9292fd519393edeb50191.png)
