@@ -2,9 +2,9 @@ from os import environ as ENV
 
 from dotenv import load_dotenv
 
-from extract import get_weather
-from transform import format_data
-from load import get_db_connection, get_location_id, enter_weather_updates
+from extract import get_weather, get_aurora_status
+from transform import format_data, get_relevant_aurora_info
+from load import get_db_connection, get_location_id, enter_weather_updates, enter_sky_update
 
 
 def location_pipeline(config, latitude, longitude):
@@ -32,6 +32,11 @@ def full_pipeline(config):
     locations = get_lats_lons(config)
     for location in locations:
         location_pipeline(config, location[0], location[1])
+    aurora_info = get_relevant_aurora_info(get_aurora_status())
+    with get_db_connection(config) as conn:
+        for i in range(1, 13):
+            enter_sky_update(config["SCHEMA_NAME"], conn, i, aurora_info)
+    conn.close()
 
 
 if __name__ == "__main__":

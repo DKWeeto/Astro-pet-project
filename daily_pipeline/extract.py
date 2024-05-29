@@ -6,28 +6,34 @@ import base64
 
 
 def get_neos(config):
-    one = get(
-        f"https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key={config['NASA_KEY']}")
-    two = get(
-        f"https://api.nasa.gov/neo/rest/v1/neo/browse?api_key={config['NASA_KEY']}")
-    return one.json(), two.json()
+    """Get info about near earth objects this upcoming week"""
+    response = get(
+        f"https://api.nasa.gov/neo/rest/v1/feed?start_date={datetime.now().date()}&end_date={datetime.now().date() + timedelta(days=7)}&api_key={config['NASA_KEY']}")
+    return response.json()["near_earth_objects"]
 
 
 def get_pic_of_day(config):
+    """Get today's pic of the day."""
     return get(f"https://api.nasa.gov/planetary/apod?api_key={config['NASA_KEY']}").json()
 
 
 def get_notifications(config):
-    return get(f"https://api.nasa.gov/DONKI/notifications?startDate=2014-05-01&endDate=2014-05-08&type=all&api_key={config['NASA_KEY']}").json()
+    return get(f"https://api.nasa.gov/DONKI/notifications?start_date={datetime.now().date()}&end_date={datetime.now().date() + timedelta(days=7)}&type=all&api_key={config['NASA_KEY']}").json()
 
 
 def get_body_positions(config, latitude, longitude):
+    """Get all hourly celestial body positions for the upcoming night."""
     userpass = f"{config['APP_ID']}:{config['APP_SECRET']}"
     authString = base64.b64encode(userpass.encode()).decode()
-    return get(f"https://api.astronomyapi.com/api/v2/bodies/positions?latitude={latitude}&longitude={longitude}&elevation=0&from_date={datetime.now().date()}&to_date={datetime.now().date() + timedelta(days=1)}&time={datetime.now().time().isoformat(timespec='seconds')}", headers={"Authorization": f"Basic {authString}"}).json()
+    forecasts = []
+    for hour in ['20', '21', '22', '23', '00', '01', '02', '03', '04']:
+        forecasts.append(get(f"https://api.astronomyapi.com/api/v2/bodies/positions?latitude={latitude}&longitude={longitude}&elevation=0&from_date={datetime.now().date()}&to_date={datetime.now().date()}&time={hour}:00:00", headers={
+                         "Authorization": f"Basic {authString}"}).json())
+    return forecasts
 
 
 def get_star_charts(config, latitude, longitude):
+    """Get all hourly star charts for the upcoming night"""
     userpass = f"{config['APP_ID']}:{config['APP_SECRET']}"
     authString = base64.b64encode(userpass.encode()).decode()
     red_chart = post("https://api.astronomyapi.com/api/v2/studio/star-chart",
@@ -39,11 +45,12 @@ def get_star_charts(config, latitude, longitude):
     return red_chart, default_chart
 
 
-load_dotenv()
-# print(get_neos(ENV))
-# print(get_pic_of_day(ENV))
-# print(get_notifications(ENV))
-# print(get_body_positions(ENV, 53, 0))
-star_charts = get_star_charts(ENV, 53, 0)
-print(star_charts[0])
-print(star_charts[1])
+if __name__ == "__main__":
+    load_dotenv()
+    print(get_neos(ENV))
+    print(get_pic_of_day(ENV))
+    print(get_notifications(ENV))
+    print(get_body_positions(ENV, 53, 0))
+    star_charts = get_star_charts(ENV, 53, 0)
+    print(star_charts[0])
+    print(star_charts[1])

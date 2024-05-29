@@ -20,3 +20,16 @@ def format_data(data: dict) -> dict:
                                                                      "visibility": int(round(data["visibility"][i])),
                                                                      "weather": weather}
     return formatted_data
+
+
+def get_relevant_aurora_info(data):
+    colour = data["state"]["@name"]
+    if colour == "green":
+        status_id = 1
+    elif colour == "amber":
+        status_id = 2
+    elif colour == "yellow":
+        status_id = 3
+    elif colour == "red":
+        status_id = 4
+    return {"time": datetime.now().replace(minute=0).isoformat(timespec="minutes"), "value": data["state"]["@value"], "status_id": status_id}

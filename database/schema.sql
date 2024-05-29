@@ -7,7 +7,6 @@ CREATE TABLE neo (
     name VARCHAR(50) NOT NULL,
     est_diameter_min BIGINT,
     est_diameter_max BIGINT,
-    image_url TEXT,
     is_hazard BOOLEAN,
     is_sentry BOOLEAN,
     PRIMARY KEY(id)
@@ -21,6 +20,13 @@ CREATE TABLE close_approach (
     approach_distance BIGINT,
     PRIMARY KEY(id),
     FOREIGN KEY(neo_id) REFERENCES neo(id)
+);
+
+CREATE TABLE notification (
+    id BIGINT GENERATED ALWAYS AS IDENTITY,
+    message_type VARCHAR(50) NOT NULL,
+    summary TEXT,
+    PRIMARY KEY(id)
 );
 
 CREATE TABLE news_article (
@@ -103,14 +109,6 @@ CREATE TABLE constellation (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE constellation_sky (
-    id BIGINT GENERATED ALWAYS AS IDENTITY,
-    constellation_id BIGINT NOT NULL,
-    sky_id BIGINT NOT NULL,
-    PRIMARY KEY(id),
-    FOREIGN KEY(constellation_id) REFERENCES constellation(id),
-    FOREIGN KEY(sky_id) REFERENCES sky(id)
-);
 
 CREATE TABLE star_chart (
     id BIGINT GENERATED ALWAYS AS IDENTITY,

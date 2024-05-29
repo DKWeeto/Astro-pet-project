@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from requests import get
+import xmltodict
 
 
 def get_weather(latitude: float, longitude: float) -> dict:
@@ -20,4 +21,6 @@ def get_weather(latitude: float, longitude: float) -> dict:
 
 
 def get_aurora_status():
-    ...
+    response = get(
+        "https://aurorawatch.lancs.ac.uk/api/0.1/status.xml")
+    return xmltodict.parse(response.content)["aurorawatch"]["current"]

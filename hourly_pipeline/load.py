@@ -91,3 +91,17 @@ def enter_weather_updates(schema, conn, location_id, data: dict):
             change_existing(schema, conn, time, data[time], id["id"])
         else:
             insert_new_data(schema, conn, time, data[time], location_id)
+
+
+def enter_sky_update(schema, conn, region_id, aurora_info):
+    sql_query = f"""
+        INSERT INTO {schema}.sky (region_id, timestamp, aurora_value, aurora_id)
+        VALUES
+        ({region_id},
+        '{aurora_info["time"]}',
+        {aurora_info["value"]},
+        {aurora_info["status_id"]});
+        """
+    with conn.cursor() as cur:
+        cur.execute(sql_query)
+        conn.commit()
