@@ -43,6 +43,7 @@ CREATE TABLE event (
 
 CREATE TABLE daily_image (
     id BIGINT GENERATED ALWAYS AS IDENTITY,
+    title TEXT,
     potd_url TEXT NOT NULL,
     date DATE NOT NULL
 );
@@ -68,7 +69,8 @@ CREATE TABLE observer_location (
 CREATE TABLE weather (
     id BIGINT GENERATED ALWAYS AS IDENTITY,
     weather VARCHAR(30) NOT NULL,
-    brightness INT NOT NULL,
+    cloud_cover INT NOT NULL,
+    temperature INT NOT NULL,
     visibility INT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
     location_id INT NOT NULL,

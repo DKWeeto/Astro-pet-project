@@ -35,6 +35,6 @@ THRESHOLD red 200
 TODO:
 FIND API OR ENDPOINT THAT GIVES BRIGHT STARS IN NIGHT SKY?
 
-![ERD draft](./Screenshot%202024-05-20%20at%2016.00.41.png)
+![ERD draft](./Screenshot%202024-05-29%20at%2007.16.14.png)
 
 ![Example star chart (red mode)](https://widgets.astronomyapi.com/star-chart/generated/5ed13e0447cb88ef6d0a4784ae1202638cf0c8bf33e9292fd519393edeb50191.png)
