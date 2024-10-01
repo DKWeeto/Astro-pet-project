@@ -1,8 +1,8 @@
 SET SEARCH_PATH TO astro_project;
 
 INSERT INTO observer_region (name, latitude, longitude)
-VALUES ('East Midlands', 53.2081,-0.4386),
-('East of England', 52.3333 ,0.4520),
+VALUES ('East Midlands', 53.2081, -0.4386),
+('East of England', 52.3333, 0.4520),
 ('Greater London', 51.4171, -0.1433),
 ('North East England', 54.8400, -1.0400),
 ('North West England', 53.9900, -3.4600),

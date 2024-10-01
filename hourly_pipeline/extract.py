@@ -22,5 +22,5 @@ def get_weather(latitude: float, longitude: float) -> dict:
 
 def get_aurora_status():
     response = get(
-        "https://aurorawatch.lancs.ac.uk/api/0.1/status.xml")
-    return xmltodict.parse(response.content)["aurorawatch"]["current"]
+        "https://aurorawatch-api.lancs.ac.uk/0.2.5/status/project/awn/sum-activity.xml")
+    return xmltodict.parse(response.content)['site_activity']['activity'][-1]

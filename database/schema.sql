@@ -24,7 +24,7 @@ CREATE TABLE close_approach (
 
 CREATE TABLE notification (
     id BIGINT GENERATED ALWAYS AS IDENTITY,
-    message_type VARCHAR(50) NOT NULL,
+    message_type TEXT NOT NULL,
     summary TEXT,
     PRIMARY KEY(id)
 );
@@ -95,7 +95,7 @@ CREATE TABLE sky (
     id BIGINT GENERATED ALWAYS AS IDENTITY,
     region_id SMALLINT NOT NULL,
     timestamp TIMESTAMP NOT NULL,
-    aurora_value INT NOT NULL,
+    aurora_value FLOAT NOT NULL,
     aurora_id INT NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(region_id) REFERENCES observer_region(id),
@@ -115,17 +115,18 @@ CREATE TABLE star_chart (
     default_url TEXT NOT NULL,
     red_url TEXT NOT NULL,
     constellation_id BIGINT NOT NULL,
-    sky_id BIGINT NOT NULL,
+    date TIMESTAMP NOT NULL,
+    region_id SMALLINT NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(constellation_id) REFERENCES constellation(id),
-    FOREIGN KEY(sky_id) REFERENCES sky(id)
+    FOREIGN KEY(region_id) REFERENCES observer_region(id),
+    FOREIGN KEY(constellation_id) REFERENCES constellation(id)
 );
 
 CREATE TABLE celestial_body (
     id BIGINT GENERATED ALWAYS AS IDENTITY,
     name TEXT NOT NULL,
-    right_ascension FLOAT NOT NULL,
-    declination FLOAT NOT NULL,
+    altitude FLOAT NOT NULL,
+    azimuth SMALLINT NOT NULL,
     earth_dist BIGINT NOT NULL,
     constellation_id BIGINT NOT NULL,
     sky_id BIGINT NOT NULL,

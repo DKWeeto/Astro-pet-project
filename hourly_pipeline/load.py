@@ -72,7 +72,7 @@ def insert_new_data(schema, conn: connection, time, data, location_id):
         conn.commit()
 
 
-def check_if_existing(schema, conn, location_id, time):
+def check_if_existing_weather(schema, conn, location_id, time):
     sql_query = f"""
                 SELECT id FROM {schema}.weather
                 WHERE location_id = {location_id}
@@ -84,9 +84,21 @@ def check_if_existing(schema, conn, location_id, time):
     return weather_id
 
 
+def check_if_existing_sky(schema, conn, region_id, time):
+    sql_query = f"""
+                SELECT id FROM {schema}.sky
+                WHERE region_id = {region_id}
+                AND timestamp = '{time}'
+                """
+    with conn.cursor() as cur:
+        cur.execute(sql_query)
+        sky_id = cur.fetchone()
+    return sky_id
+
+
 def enter_weather_updates(schema, conn, location_id, data: dict):
     for time in data.keys():
-        id = check_if_existing(schema, conn, location_id, time)
+        id = check_if_existing_weather(schema, conn, location_id, time)
         if id:
             change_existing(schema, conn, time, data[time], id["id"])
         else:
@@ -94,7 +106,24 @@ def enter_weather_updates(schema, conn, location_id, data: dict):
 
 
 def enter_sky_update(schema, conn, region_id, aurora_info):
-    sql_query = f"""
+    id = check_if_existing_sky(
+        schema, conn, region_id, aurora_info["time"])
+    if id:
+        sql_query = f"""
+        UPDATE {schema}.sky AS s
+        SET
+        aurora_value = u.aurora_val,
+        aurora_id = u.a_id
+        FROM(
+        VALUES
+        ({id["id"]}, {aurora_info["value"]}, {aurora_info["status_id"]}))
+        AS u(id, aurora_val, a_id)
+        WHERE s.timestamp = '{aurora_info["time"]}'
+        AND s.region_id = {region_id}
+        AND s.id = u.id;
+        """
+    else:
+        sql_query = f"""
         INSERT INTO {schema}.sky (region_id, timestamp, aurora_value, aurora_id)
         VALUES
         ({region_id},

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 WEATHER_CODES = {0:	"Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
                  45: "Fog", 48: "Depositing rime fog", 51: "Light Drizzle", 53: "Moderate Drizzle",
@@ -23,13 +23,13 @@ def format_data(data: dict) -> dict:
 
 
 def get_relevant_aurora_info(data):
-    colour = data["state"]["@name"]
+    colour = data["@status_id"]
     if colour == "green":
         status_id = 1
-    elif colour == "amber":
-        status_id = 2
     elif colour == "yellow":
+        status_id = 2
+    elif colour == "amber":
         status_id = 3
     elif colour == "red":
         status_id = 4
-    return {"time": datetime.now().replace(minute=0).isoformat(timespec="minutes"), "value": data["state"]["@value"], "status_id": status_id}
+    return {"time": datetime.strptime(data["datetime"].split('+')[0], "%Y-%m-%dT%H:%M:%S") + timedelta(hours=1), "value": data["value"], "status_id": status_id}
