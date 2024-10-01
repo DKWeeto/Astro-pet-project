@@ -231,6 +231,7 @@ def get_bodies_list(config, region_name):
 
 
 def display_body():
+    # TODO: this can be displayed way better
     body = st.session_state.bodies[st.session_state.b_count]
     body_name = list(body.keys())[0]
     if body_name in ["Waxing Crescent", "Waning Crescent", "Waxing Gibbous", "Waning Gibbous", "First Quarter", "Third Quarter", "Full", "New"]:
