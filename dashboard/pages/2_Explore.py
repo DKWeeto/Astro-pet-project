@@ -86,5 +86,7 @@ if __name__ == "__main__":
     st.markdown("## Near Earth Objects")
     with connect_to_db(dict(ENV)) as conn:
         neos = get_neos(conn, ENV)
+    # TODO: make NEOs look prettier
     st.table(pd.DataFrame(neos))
+    # TODO: find good API to get meteor showers
     st.markdown("## Meteor shower timetable")

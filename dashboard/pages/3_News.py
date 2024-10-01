@@ -49,4 +49,5 @@ if __name__ == "__main__":
     init_themes()
     load_dotenv()
     st.markdown("## News articles")
+    # TODO: make a news scraper innit
     st.markdown("TODO")

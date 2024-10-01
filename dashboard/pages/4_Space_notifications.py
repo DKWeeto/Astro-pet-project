@@ -57,6 +57,7 @@ if __name__ == "__main__":
     load_dotenv()
     with connect_to_db(dict(ENV)) as conn:
         notifications = get_notifications(conn, ENV)
+    # TODO: what do i even do with this, might be useless
     for notification in notifications:
         st.markdown(f"# {notification[0]}")
         st.markdown(f"{notification[1]}")
