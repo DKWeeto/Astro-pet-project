@@ -234,26 +234,74 @@ def display_body():
     # TODO: this can be displayed way better
     body = st.session_state.bodies[st.session_state.b_count]
     body_name = list(body.keys())[0]
+    moon_phase = ""
     if body_name in ["Waxing Crescent", "Waning Crescent", "Waxing Gibbous", "Waning Gibbous", "First Quarter", "Third Quarter", "Full", "New"]:
-        body_name = f"The Moon: {body_name}"
+        moon_phase = body_name
+        body_name = "The Moon"
     items = list(body.values())[0]
     st.title(body_name)
-    for event in items:
-        altitude, azimuth, constellation, timestamp = event
-        # change this to like a drop down or widget or metric or something for each time
-        with st.container(border=True):
+    if body_name == "The Moon":
+        st.markdown(
+            f'<h3 style="text-align: center"> Phase: {moon_phase} </h3>', unsafe_allow_html=True)
+    stuff = pd.DataFrame(
+        items, columns=['Altitude', 'Direction', 'Constellation', 'Timestamp'])
+    highest = stuff.iloc[stuff['Altitude'].idxmax()]
+    st.markdown(f"### When {body_name} is at it's highest:")
+    st.markdown(
+        f"<h4 style='text-align: left;'>{highest['Timestamp']}</h4>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    with col1.container(border=True):
+        st.markdown(
+            f"<h5 style='text-align: center;'>Altitude: {highest['Altitude']}°</h5>", unsafe_allow_html=True)
+    with col2.container(border=True):
+        st.markdown(
+            f"<h5 style='text-align: center;'>Direction: {highest['Direction']}°</h5>", unsafe_allow_html=True)
+    with col3.container(border=True):
+        st.markdown(
+            f"<h5 style='text-align: center;'>Constellation: {highest['Constellation']}</h5>", unsafe_allow_html=True)
+    st.markdown(f"### {body_name} tonight:")
+    if len(items) > 1:
+        if st.session_state.themebutton == "dark":
+            main_color = "#8B0000"
+        else:
+            main_color = "#000000"
+        st.altair_chart(alt.Chart(stuff).mark_line(color=main_color, point=True).encode(
+            x='Timestamp',
+            y='Altitude',
+            color=alt.value(main_color),
+            tooltip=[alt.Tooltip('Altitude', type="nominal", title="Altitude ° :"), alt.Tooltip(
+                'Direction', type="nominal", title="Direction ° :"), alt.Tooltip('Constellation', title="Constellation :")]
+        ).configure_axis(
+            tickColor=main_color,
+            labelColor=main_color,
+            titleColor=main_color,
+            domainColor=main_color,
+            grid=False).configure_legend(
+            labelColor=main_color,
+            titleColor=main_color), use_container_width=True)
+    else:
+        if body_name != "The Moon":
             st.markdown(
-                f"<h4 style='text-align: left;'>At: {timestamp}</h4>", unsafe_allow_html=True)
-            col1, col2, col3 = st.columns(3)
-            with col1.container(border=True):
-                st.markdown(
-                    f"<h5 style='text-align: center;'>Altitude: {altitude}°</h5>", unsafe_allow_html=True)
-            with col2.container(border=True):
-                st.markdown(
-                    f"<h5 style='text-align: center;'>Direction: {azimuth}°</h5>", unsafe_allow_html=True)
-            with col3.container(border=True):
-                st.markdown(
-                    f"<h5 style='text-align: center;'>Constellation: {constellation}</h5>", unsafe_allow_html=True)
+                f'<h4 style="text-align: center"> No more {body_name} visibility tonight </h4>', unsafe_allow_html=True)
+        else:
+            st.markdown(
+                f'<h4 style="text-align: center"> No more visibility for the Moon tonight </h4>', unsafe_allow_html=True)
+    # for event in items:
+    #     altitude, azimuth, constellation, timestamp = event
+    #     # change this to like a drop down or widget or metric or something for each time
+    #     with st.container(border=True):
+    #         st.markdown(
+    #             f"<h4 style='text-align: left;'>At: {timestamp}</h4>", unsafe_allow_html=True)
+    #         col1, col2, col3 = st.columns(3)
+    #         with col1.container(border=True):
+    #             st.markdown(
+    #                 f"<h5 style='text-align: center;'>Altitude: {altitude}°</h5>", unsafe_allow_html=True)
+    #         with col2.container(border=True):
+    #             st.markdown(
+    #                 f"<h5 style='text-align: center;'>Direction: {azimuth}°</h5>", unsafe_allow_html=True)
+    #         with col3.container(border=True):
+    #             st.markdown(
+    #                 f"<h5 style='text-align: center;'>Constellation: {constellation}</h5>", unsafe_allow_html=True)
     # st.markdown(
     #     f'<img src="{body}" alt="Celestial body image" width="650"/>', unsafe_allow_html=True)
 

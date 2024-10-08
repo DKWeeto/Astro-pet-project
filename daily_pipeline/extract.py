@@ -54,11 +54,11 @@ def get_star_charts(config: dict, latitude: float, longitude: float,
                         {longitude},"date":"{datetime.now().date()}"}},"view":\
                             {{"type":"constellation","parameters":\
                             {{"constellation":"{constellation_code}"}},"zoom":6}}}}',
-                     headers={"Authorization": f"Basic {auth_string}"}, timeout=60).json()
+                     headers={"Authorization": f"Basic {auth_string}"}, timeout=300).json()
     default_chart = post("https://api.astronomyapi.com/api/v2/studio/star-chart",
                          f'{{"style":"default","observer":{{"latitude":{latitude},"longitude":\
                             {longitude},"date":"{datetime.now().date()}"}},"view":\
                                 {{"type": "constellation", "parameters":\
                                 {{"constellation": "{constellation_code}"}}, "zoom": 6}}}}',
-                         headers={"Authorization": f"Basic {auth_string}"}, timeout=60).json()
+                         headers={"Authorization": f"Basic {auth_string}"}, timeout=300).json()
     return red_chart, default_chart
