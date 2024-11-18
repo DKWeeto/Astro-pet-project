@@ -279,6 +279,8 @@ def display_body():
             grid=False).configure_legend(
             labelColor=main_color,
             titleColor=main_color), use_container_width=True)
+        st.markdown(f"### Where is {body_name} right now?")
+        st.write("#TODO")
     else:
         if body_name != "The Moon":
             st.markdown(

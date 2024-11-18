@@ -30,6 +30,5 @@ def init_themes():
 if __name__ == "__main__":
     init_themes()
 
-    
     title = '<p style="font-family: Futura;font-size: 75px;">Welcome to the <em>Night Sky Forecast!</em></p>'
     st.markdown(title, unsafe_allow_html=True)
